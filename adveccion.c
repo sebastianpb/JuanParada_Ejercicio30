@@ -71,15 +71,17 @@ int main(int argc, char **argv){
     double t_max_values[4]={0, 0.5, 1, 2.0};
     double delta_t=0.5*delta_x;
     
-    omp_set_num_threads(4);
-    #pragma omp parallel
-    {    
+    omp_set_num_threads(4);   
         
+            
+    FILE *out;
+            
+    #pragma omp parallel
+    { 
         int thread_id=omp_get_thread_num();
         int thread_count=omp_get_num_threads();
         printf("Hello from thread number: %d out of: %d\n",thread_id,thread_count);
         
-        FILE *out;
         double t_max=t_max_values[thread_id];
         
             // Inicializar todo en cero
@@ -131,18 +133,5 @@ int main(int argc, char **argv){
         
     }
     
-     // Save x vals into dat file
-    char filename[128];
-    FILE *out;
-    sprintf(filename, "adveccion_x.dat");
-
-    if(!(out = fopen(filename, "w"))){
-        fprintf(stderr, "Problema abriendo el archivo\n");
-        exit(1);
-    }
-    for(i=0;i<N;i++){
-        fprintf(out, "%Lf\n", x[i]);
-    }
-    fclose(out); 
     
 }
